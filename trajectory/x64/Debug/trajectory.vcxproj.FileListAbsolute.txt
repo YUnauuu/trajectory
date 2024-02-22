@@ -1,0 +1,1 @@
+D:\code\c++\trajectory\x64\Debug\trajectory.exe
