@@ -12,10 +12,10 @@ public:
 	Data(){}
 	Data(string p) : path(p) {}
 	
-	vector<vector<double>> data;
+	vector<vector<double>> data; //我用 double类型存储维度lat 、经度lon 和海拔ele，时间数据还没存，不知道用long int还是string
 	void readData();//读取数据
 	void readData(string p);//读取数据
-	void trajectoryCompression();//轨迹压缩-基于路网压缩
+	void trajectoryCompression();//轨迹压缩-基于路网压缩，未实现
 private:
 	string path;
 
