@@ -12,7 +12,7 @@ public:
 	Data(){}
 	Data(string p) : path(p) {}
 	
-	vector<vector<string>> data;
+	vector<vector<double>> data;
 	void readData();//读取数据
 	void readData(string p);//读取数据
 	void trajectoryCompression();//轨迹压缩-基于路网压缩
@@ -43,7 +43,7 @@ void Data::readData()
 	subsubNode = subsubNode->NextSiblingElement();
 
 	XMLElement* trajNode = subsubNode->FirstChildElement();
-	vector<string> tempVec;
+	vector<double> tempVec;
 	int i = 0;
 	XMLElement* subtrajNode;
 	while (trajNode)
@@ -51,15 +51,15 @@ void Data::readData()
 
 		string str = trajNode->Attribute("lat");
 		tempVec.clear();
-		tempVec.emplace_back(str);
+		tempVec.emplace_back(stod(str));
 		str = trajNode->Attribute("lon");
-		tempVec.emplace_back(str);
+		tempVec.emplace_back(stod(str));
 		subtrajNode = trajNode->FirstChildElement();
 		str = subtrajNode->GetText();
-		tempVec.emplace_back(str);
+		tempVec.emplace_back(stod(str));
 		subtrajNode = subtrajNode->NextSiblingElement();
 		str = subtrajNode->GetText();
-		tempVec.emplace_back(str);
+		//tempVec.emplace_back(str);//时间如 2024-02-21T14:36:52Z
 
 		data.emplace_back(tempVec);
 		trajNode = trajNode->NextSiblingElement();

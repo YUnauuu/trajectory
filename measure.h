@@ -1,6 +1,6 @@
 #pragma once
 #include"data.h"
-
+#include"thread_pool.h"
 //度量方法
 class Measure
 {

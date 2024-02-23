@@ -69,23 +69,3 @@ private:
 
 	bool stop;
 };
-
-//int main()
-//{
-//	ThreadPool pool(4);
-//
-//	for (int i = 0; i < 10; ++i)
-//	{
-//		pool.enqueue([i] {
-//			std::mutex mtx;
-//			mtx.lock();
-//			std::cout << "task: " << i << " is running!" << std::endl;
-//			mtx.unlock();
-//			std::this_thread::sleep_for(std::chrono::seconds(1));
-//			mtx.lock();
-//			std::cout << "task: " << i << " is done!" << std::endl;
-//			mtx.unlock();
-//			});
-//	}
-//	return 0;
-//}
