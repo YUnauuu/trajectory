@@ -1,2 +1,14 @@
 ﻿  main.cpp
-  trajectory.vcxproj -> D:\code\c++\trajectory\x64\Debug\trajectory.exe
+D:\code\c++\trajectory\data.h(16): error C2648: “Data::path”: 将成员作为默认参数使用要求静态成员
+D:\code\c++\trajectory\data.h(14,9): message : 参见“Data::path”的声明
+D:\code\c++\trajectory\data.h(16): error C2355: “this”: 只能在非静态成员函数或非静态数据成员初始值设定项的内部引用
+D:\code\c++\trajectory\data.h(16,23): error C2597: 对非静态成员“Data::path”的非法引用
+D:\code\c++\trajectory\data.h(14,9): message : 参见“Data::path”的声明
+D:\code\c++\trajectory\data.h(16,23): error C2440: “默认参数”: 无法从“unknown”转换为“std::string”
+D:\code\c++\trajectory\data.h(16,23): message : 无构造函数可以接受源类型，或构造函数重载决策不明确
+D:\code\c++\trajectory\data.h(23,32): error C2597: 对非静态成员“Data::path”的非法引用
+D:\code\c++\trajectory\data.h(14,9): message : 参见“Data::path”的声明
+D:\code\c++\trajectory\data.h(23,32): error C2440: “默认参数”: 无法从“unknown”转换为“std::string”
+D:\code\c++\trajectory\data.h(23,32): message : 无构造函数可以接受源类型，或构造函数重载决策不明确
+D:\code\c++\trajectory\data.h(23,32): error C2572: “Data::readData”: 重定义默认参数 : 参数 1
+D:\code\c++\trajectory\data.h(16,7): message : 参见“Data::readData”的声明

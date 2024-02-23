@@ -5,25 +5,37 @@
 
 using namespace std;
 using namespace tinyxml2;
-//读取数据集，保存在data中
+//轨迹数据处理
 class Data
 {
 public:
+	Data(){}
 	Data(string p) : path(p) {}
-	string path;
+	
 	vector<vector<string>> data;
-	bool readData();
+	void readData();//读取数据
+	void readData(string p);//读取数据
+	void trajectoryCompression();//轨迹压缩-基于路网压缩
+private:
+	string path;
 
 };
-bool Data::readData()
+
+void Data::readData()
 {
 	XMLDocument doc;
 	if (doc.LoadFile(path.c_str()) != XML_SUCCESS)
-		return false;
+	{
+		cout << "File read error!" << endl;
+		exit(-1);
+	}
 
 	XMLElement* rootNode = doc.RootElement();
 	if (!rootNode)
-		return false;
+	{
+		cout << "File read error!" << endl;
+		exit(-1);
+	}
 
 	XMLElement* subNode = rootNode->FirstChildElement();
 	subNode = subNode->NextSiblingElement();
@@ -52,5 +64,13 @@ bool Data::readData()
 		data.emplace_back(tempVec);
 		trajNode = trajNode->NextSiblingElement();
 	}
-	return true;
+}
+void Data::readData(string p)
+{
+	path = p;
+	readData();
+}
+void Data::trajectoryCompression()
+{
+
 }

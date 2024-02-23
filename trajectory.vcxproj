@@ -128,6 +128,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="data.h" />
+    <ClInclude Include="euclidean.h" />
+    <ClInclude Include="measure.h" />
+    <ClInclude Include="thread_pool.h" />
     <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>

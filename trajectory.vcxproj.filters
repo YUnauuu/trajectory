@@ -21,6 +21,15 @@
     <ClInclude Include="data.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="thread_pool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="measure.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="euclidean.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tinyxml2.cpp">
