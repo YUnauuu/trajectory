@@ -21,13 +21,16 @@
     <ClInclude Include="data.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="thread_pool.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="measure.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="euclidean.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="xthread_pool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="xtask.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,6 +39,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="xthread_pool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="data.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="euclidean.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

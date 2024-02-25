@@ -8,8 +8,33 @@
 #include<vector>
 #include<functional>
 
-class ThreadPool
-{//线程池
+//线程基类
+class XThread
+{
+public:
+	virtual void Start()//启动线程
+	{
+		is_exit_ = false;
+		th_ = std::thread(&XThread::Main, this);
+	}
+	virtual void Wait()
+	{
+		if (th_.joinable())
+			th_.join();
+	}
+	virtual void Stop()
+	{
+
+	}
+private:
+	virtual void Main() = 0;
+	std::thread th_;
+	bool is_exit_ = false;
+};
+
+//线程池
+class ThreadPool : public XThread
+{
 public:
 	ThreadPool(int numThreads) : stop(false)
 	{

@@ -130,12 +130,16 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="euclidean.h" />
     <ClInclude Include="measure.h" />
-    <ClInclude Include="thread_pool.h" />
     <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="xtask.h" />
+    <ClInclude Include="xthread_pool.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="data.cpp" />
+    <ClCompile Include="euclidean.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="xthread_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\11291960.gpx" />
