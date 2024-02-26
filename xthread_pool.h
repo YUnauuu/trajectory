@@ -3,6 +3,7 @@
 #include<mutex>
 #include<vector>
 #include<list>
+#include<tuple>
 #include<condition_variable>
 #include<functional>
 #include<atomic>

@@ -21,9 +21,6 @@
     <ClInclude Include="data.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="measure.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="euclidean.h">
       <Filter>头文件</Filter>
     </ClInclude>

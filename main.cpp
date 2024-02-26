@@ -1,11 +1,10 @@
 #include<iostream>
 #include"data.h"
-#include"measure.h"
 #include "xthread_pool.h"
 #include"euclidean.h"
 
-XThreadPool pool;
-
+XThreadPool pool;//线程池
+std::vector<double> result;//结果数组
 
 int main()
 {

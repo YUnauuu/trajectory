@@ -2,8 +2,11 @@
 #include<functional>
 #include<future>
 #include<string>
+#include<mutex>
 #include"data.h"
 
+extern std::vector<double> result;
+static std::mutex mux_;
 //任务基类
 class XTask
 {
@@ -15,12 +18,6 @@ public:
 	//实行计算
 	virtual int compute() = 0;
 
-	//读取数据
-	/*void Read(std::string path1, std::string path2)
-	{
-		data1.readData(path1);
-		data2.readData(path2);
-	}*/
 	std::function<bool()> is_exit = nullptr;
 	auto GetResult()
 	{
@@ -30,7 +27,10 @@ public:
 	void SetValue(double v)
 	{
 		p_.set_value(v);
+		std::unique_lock<std::mutex> lock(mux_);
+		result.emplace_back(v);
 	}
+	
 private:
 	//计算结果值
 	std::promise<double> p_;

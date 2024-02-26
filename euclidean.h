@@ -7,7 +7,7 @@ class Euclidean : public XTask
 {
 public:
 	Euclidean(){}
-	Euclidean(std::vector<std::vector<double>> vec_a, std::vector<std::vector<double>> vec_b) 
+	Euclidean(std::vector<std::tuple<double, double, double, std::string>> vec_a, std::vector<std::tuple<double, double, double, std::string>> vec_b)
 	{
 		for (int i = 0; i < vec_a.size(); ++i)
 		{
@@ -16,6 +16,6 @@ public:
 		}
 	}
 	int compute() override;
-	std::vector<std::vector<double>> vec_a;
-	std::vector<std::vector<double>> vec_b;
+	std::vector<std::tuple<double, double, double, std::string>> vec_a;
+	std::vector<std::tuple<double, double, double, std::string>> vec_b;
 };

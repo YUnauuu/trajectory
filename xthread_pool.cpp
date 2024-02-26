@@ -2,13 +2,14 @@
 #include<iostream>
 using namespace std;
 
+extern std::vector<double> result;
 //初始化线程池
 //@para num 线程数量
 void XThreadPool::Init(int num)
 {
 	unique_lock<mutex> lock(mux_);
 	this->thread_num_ = num;
-	cout << "Thread pool Init" << num << endl;
+	cout << "Thread pool Init: " << num << endl;
 }
 
 //启动所有线程，请先调用Init
@@ -42,6 +43,12 @@ void XThreadPool::Stop()
 	{
 		th->join();
 	}
+	double res = 0.0;
+	for (double& d : result)
+	{
+		res += d;
+	}
+	cout <<"result: " << res << endl;
 	unique_lock<mutex> lock(mux_);
 	threads_.clear();
 }

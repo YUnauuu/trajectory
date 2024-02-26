@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClInclude Include="data.h" />
     <ClInclude Include="euclidean.h" />
-    <ClInclude Include="measure.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="xtask.h" />
     <ClInclude Include="xthread_pool.h" />
