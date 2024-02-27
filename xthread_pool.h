@@ -20,7 +20,7 @@ public:
 	void Init(int num);
 
 	//启动所有线程，请先调用Init
-	void Start();
+	//void Start();
 
 	//线程池退出
 	void Stop();
@@ -47,7 +47,8 @@ private:
 	std::mutex mux_;//互斥锁
 	//std::list<XTask*> tasks_;//任务列表
 	std::list<std::shared_ptr<XTask>> tasks_;//任务列表
-	std::condition_variable cv_;//信号量
+	std::condition_variable cv_;//信号量-添加一个任务时唤醒一个线程
+	std::condition_variable cv_task_maxNum_;//信号量-达到最大任务数量，等待一个任务结束
 	bool is_exit_ = false;//线程池退出标记
 
 	//正在运行的任务数量,线程安全

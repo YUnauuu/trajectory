@@ -5,8 +5,8 @@
 #include<mutex>
 #include"data.h"
 
-extern std::vector<double> result;
-static std::mutex mux_;
+extern double result;
+
 //任务基类
 class XTask
 {
@@ -16,6 +16,7 @@ public:
 	//virtual void dataProcessing() = 0;
 
 	//实行计算
+	//virtual int Run() = 0;
 	virtual int compute() = 0;
 
 	std::function<bool()> is_exit = nullptr;
@@ -27,8 +28,6 @@ public:
 	void SetValue(double v)
 	{
 		p_.set_value(v);
-		std::unique_lock<std::mutex> lock(mux_);
-		result.emplace_back(v);
 	}
 	
 private:

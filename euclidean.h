@@ -3,6 +3,7 @@
 #include"xtask.h"
 
 //欧几里得距离度量方法
+static std::mutex mux_;
 class Euclidean : public XTask
 {
 public:

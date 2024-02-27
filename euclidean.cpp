@@ -1,5 +1,5 @@
 #include"euclidean.h"
-#include<iostream>
+
 
 using namespace std;
 
@@ -12,7 +12,11 @@ int Euclidean::compute()
 		sum += (get<0>(vec_a[i]) - get<0>(vec_b[i])) * (get<0>(vec_a[i]) - get<0>(vec_b[i])) + (get<1>(vec_a[i]) - get<1>(vec_b[i])) * (get<1>(vec_a[i]) - get<1>(vec_b[i]));
 	}
 	this->SetValue(sum);
-	std::cout << sum << std::endl;
-
+	//std::cout << sum << std::endl;
+	{
+		unique_lock<mutex> lock(mux_);
+		result += sum;
+	}
+	
 	return 0;
 }

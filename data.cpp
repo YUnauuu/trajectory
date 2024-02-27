@@ -61,8 +61,10 @@ void Data::readData(string path1, string path2)
 	tuple<double, double, double, string> tuple_a, tuple_b;
 
 	vector<tuple<double, double, double, string>> vec_a, vec_b;
-	int count = 0;
 	const int unitNum = 1000;//每组的个数
+	vec_a.reserve(unitNum);
+	vec_b.reserve(unitNum);
+	int count = 0;
 	XMLElement* subtrajNode1, * subtrajNode2;
 	while (trajNode1 && trajNode2)
 	{

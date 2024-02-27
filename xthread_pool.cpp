@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 
-extern std::vector<double> result;
+
 //初始化线程池
 //@para num 线程数量
 void XThreadPool::Init(int num)
@@ -10,21 +10,7 @@ void XThreadPool::Init(int num)
 	unique_lock<mutex> lock(mux_);
 	this->thread_num_ = num;
 	cout << "Thread pool Init: " << num << endl;
-}
 
-//启动所有线程，请先调用Init
-void XThreadPool::Start()
-{
-	unique_lock<mutex> lock(mux_);
-	if (thread_num_ <= 0)
-	{
-		cerr << "请先调用Init" << endl;
-		return;
-	}
-	if (!threads_.empty())
-	{
-		cerr << "线程已启动" << endl;
-	}
 	//启动线程
 	for (int i = 0; i < thread_num_; ++i)
 	{
@@ -43,12 +29,7 @@ void XThreadPool::Stop()
 	{
 		th->join();
 	}
-	double res = 0.0;
-	for (double& d : result)
-	{
-		res += d;
-	}
-	cout <<"result: " << res << endl;
+
 	unique_lock<mutex> lock(mux_);
 	threads_.clear();
 }
@@ -58,9 +39,19 @@ void XThreadPool::Run()
 {
 	while (!is_exit())
 	{
+		
+		
 		auto task = GetTask();
 		if (!task) continue;
 		++task_run_count_;
+		/*{
+			unique_lock<mutex> lock(mux_);
+			if (task_run_count() == thread_num_)
+			{
+				cv_task_maxNum_.wait(lock);
+				cout << "线程数达最大" << endl;
+			}
+		}*/
 		try
 		{
 			auto re = task->compute();
@@ -100,5 +91,6 @@ std::shared_ptr<XTask> XThreadPool::GetTask()
 	}
 	auto task = tasks_.front();
 	tasks_.pop_front();
+	cv_task_maxNum_.notify_one();
 	return task;
 }
