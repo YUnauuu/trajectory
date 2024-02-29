@@ -15,11 +15,13 @@ std::mutex mtx_data_queue;//互斥使用 data_queue
 //std::queue<Data> data_queue;//存放所有读取的数据
 std::vector<Data> data_vector;//存放所有读取的数据
 std::condition_variable cv_data;//如果data为空则阻塞计算，当读取文件后唤醒计算
-//std::atomic<int> files_count(0);//记录文件数
-std::atomic<int> read_data_count(0);//记录读取数据个数
+std::atomic<int> files_count(0);//记录总文件数
+std::atomic<int> read_data_count(0);//记录已读取数据个数
 //std::atomic<bool> all_file_have_add(false);//标记是否所有文件读取已加入任务列表
-std::condition_variable cv_have_read_all_data;
-int file_count;//文件数
+std::condition_variable cv_have_read_all_data;//条件变量 已经通过 data_function 读完所有数据
+std::atomic<bool> files_count_get(false);//是否获取文件总数 files_count
+std::atomic<bool> all_tasks_have_add(false);//标记全部任务已添加到任务队列
+//int file_count;//文件数
 
 //读取文件
 void data_function(std::string path)
@@ -33,7 +35,7 @@ void data_function(std::string path)
 	}
 	cv_data.notify_one();
 	++read_data_count;
-	if (file_count == read_data_count)
+	if (files_count_get && files_count == read_data_count)
 		cv_have_read_all_data.notify_one();
 	
 	/*Data data2 = data;
@@ -60,9 +62,8 @@ void compute_function(compute_method m, int rank)
 
 }
 //读取一个文件夹下的所有文件
-void allFile(std::string path, int count)
+void allFile(std::string path)
 {
-	file_count = count;
 	std::string folder_path = path;
 	// 检查文件夹是否存在  
 	if (!std::filesystem::exists(folder_path)) {
@@ -84,11 +85,11 @@ void allFile(std::string path, int count)
 		
 		XThreadPool::GetInstance().AddTask(data_function, entry.path().string());
 		//XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, static_cast<int>(files_count));
-		//++files_count;//文件数 +1
+		++files_count;//文件数 +1
 		// 输出文件名
 		//std::cout << entry.path().filename() << std::endl;
 	}
-
+	files_count_get.store(true);
 }
 int main()
 {
@@ -100,12 +101,14 @@ int main()
 	
 	std::mutex temp_mtx;
 	std::unique_lock<std::mutex> lock(temp_mtx);
-	allFile("./data/", 17);
+	allFile("./data/");
 	cv_have_read_all_data.wait(lock);
-	for (int i = 0; i < file_count; ++i)
+	for (int i = 0; i < files_count; ++i)
 	{
 		XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, i);
 	}
+	all_tasks_have_add.store(true);//全部任务已添加到任务队列
+
 	//cv_have_read_all_data.wait(mtx_data_queue);
 	//std::this_thread::sleep_for(std::chrono::seconds(10));
 	
