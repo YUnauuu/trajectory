@@ -1,27 +1,29 @@
 ﻿#pragma once
-#include"tinyxml2.h"
+//#include"tinyxml2.h"
 #include<string>
 #include<vector>
-#include<tuple>
+#include<array>
 
 //轨迹数据
 class Data
 {
 public:
 	Data(){}
-	Data(std::string p) : path(p) {}
-	Data(std::string p, std::string p2) : path(p), path2(p2){}
-	
-	//我用 double类型存储维度lat 、经度lon 和海拔ele，时间数据暂时用string存
-	std::vector<std::tuple<double, double, double, std::string>> data;
 
-	//读取数据
-	void readData(std::string p, std::string p2);
+	//从path路径读取数据并存到data
+	void ReadData(std::string path);
+	//void readData(std::string path1, std::string path2);
 
 	//轨迹压缩-基于路网压缩，未实现
 	void trajectoryCompression();
+
+	//获取数据
+	std::vector<std::array<double, 2>> GetData();
+	//获取文件名
+	std::string GetName();
 private:
+	std::vector<std::array<double, 2>> data;
 	std::string path;
-	std::string path2;
+	std::vector<double> distance;//保存与其他数据集间的距离，顺序与queue<Data> data_queue 一致
 };
 

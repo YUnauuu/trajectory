@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +131,7 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="euclidean.h" />
     <ClInclude Include="tinyxml2.h" />
-    <ClInclude Include="xtask.h" />
+    <ClInclude Include="method.h" />
     <ClInclude Include="xthread_pool.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,10 +140,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="xthread_pool.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\11291960.gpx" />
-    <None Include="data\11291991.gpx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

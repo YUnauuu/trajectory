@@ -27,7 +27,7 @@
     <ClInclude Include="xthread_pool.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="xtask.h">
+    <ClInclude Include="method.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +47,5 @@
     <ClCompile Include="euclidean.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\11291960.gpx">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="data\11291991.gpx">
-      <Filter>资源文件</Filter>
-    </None>
   </ItemGroup>
 </Project>
