@@ -22,16 +22,11 @@ private:
 	//单例模式-禁止外部构造，析构
 
 	int thread_num_ = 0;//线程数量
-	//std::vector<std::thread*> threads_;//线程
-	//std::list<XTask*> tasks_;//任务列表
-	//std::vector<std::shared_ptr<std::thread>> threads_;//线程智能指针
-	//std::queue<std::shared_ptr<XTask>> tasks_;//任务指针 队列
 	std::vector<std::thread> threads_;//线程
 	std::queue<std::function<void()>> tasks_;//任务队列, 装的是 函数
 	std::mutex tasks_mux_;//任务队列的互斥锁
 	std::mutex std_mtx;//输出时的互斥锁
 
-	
 	std::condition_variable cv_;//条件变量-添加一个任务时唤醒线程
 	std::condition_variable cv_tasks_reach_Max;//条件变量-达到最大任务数量，等待一个任务结束
 	bool is_exit_ = false;//线程池退出标记
@@ -52,7 +47,7 @@ public:
 	//初始化线程池 num 线程数量
 	void Init(int num);
 
-	//线程池退出
+	//线程池退出，输出最终结果，包含归一化、阈值
 	void Stop();
 
 	//添加任务到任务队列 tasks_

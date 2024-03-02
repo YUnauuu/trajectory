@@ -5,7 +5,7 @@
 #include<mutex>
 #include"data.h"
 
-extern double result;
+//extern double result;
 extern std::vector<Data> data_vector;
 
 //计算方法基类

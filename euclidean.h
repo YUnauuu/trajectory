@@ -18,9 +18,9 @@ public:
 			this->vec_b.emplace_back(vec_b[i]);
 		}
 	}*/
-	std::vector<double> result_vector;//保存计算结果， 只有与 rank 后面的数据 的计算结果
+	//std::vector<double> result_vector;//保存计算结果， 只有与 rank 后面的数据 的计算结果
 	Data data;//一个 Euclidean 对象存储一个数据(轨迹)
 	int rank;//这个对象的 data 在data_queue 中的排位
 	//void compute(int rank);//计算data_vector 中第rank位的数据
-	void compute(Data& data2);//与 data2 计算距离
+	void compute(int i);//与 data2 计算距离
 };

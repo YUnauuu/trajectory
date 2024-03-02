@@ -1,7 +1,12 @@
 #include "xthread_pool.h"
 #include<iostream>
-using namespace std;
+#include<chrono>
 
+extern const double threshold_value = 0.5;//输出阈值
+extern std::chrono::steady_clock::time_point start;//记录开始时间
+extern std::atomic<bool> all_tasks_have_add;//标记全部任务已添加到任务队列
+extern std::vector<Data> data_vector;//存放所有读取的数据
+extern std::vector<std::vector<double>> result_vv;//结果数组，二维数组
 
 //初始化线程池 num 线程数量
 void XThreadPool::Init(int num)
@@ -9,7 +14,7 @@ void XThreadPool::Init(int num)
 	is_exit_ = false;
 	//unique_lock<mutex> lock(tasks_mux_);
 	this->thread_num_ = num;
-	cout << "Thread pool Init: " << num << endl;
+	//std::cout << "Thread pool Init: " << num << std::endl;
 
 	//开启线程 使用 Run() 作为线程入口，即运行 Run() 函数
 	for (int i = 0; i < thread_num_; ++i)
@@ -36,7 +41,7 @@ void XThreadPool::Init(int num)
 //	}
 //}
 
-//线程池退出
+//线程池退出，输出最终结果
 void XThreadPool::Stop()
 {
 	//is_exit_ = true;
@@ -46,9 +51,34 @@ void XThreadPool::Stop()
 		//th->join();
 		th.join();
 	}
-	
-	unique_lock<mutex> lock(tasks_mux_);
-	cout << "Stop" << endl;
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();//记录结束时间
+	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+	std::cout << "用时：" << duration.count() << "s" << std::endl;
+	double max = result_vv[0][1];
+	double min = result_vv[0][1];
+	for (int i = 0; i < result_vv.size(); ++i)
+	{
+		for (int j = i + 1; j < result_vv.size(); ++j)
+		{
+			//std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 间距离：" << result_vv[i][j] << std::endl;
+			if (max < result_vv[i][j])
+				max = result_vv[i][j];
+			if (min > result_vv[i][j])
+				min = result_vv[i][j];
+		}
+	}
+	for (int i = 0; i < result_vv.size(); ++i)
+	{
+		for (int j = i + 1; j < result_vv.size(); ++j)
+		{
+			result_vv[i][j] = 1.0 - (result_vv[i][j] - min) / (max - min);//使用Min-Max 归一化
+			//std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 相似度：" << result_vv[i][j] << std::endl;
+			if(result_vv[i][j] > threshold_value)
+				std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 相似度：" << result_vv[i][j] << std::endl;
+		}
+	}
+	std::unique_lock<std::mutex> lock(tasks_mux_);
+	//std::cout << "Stop" << std::endl;
 	threads_.clear();
 }
 
@@ -116,10 +146,18 @@ void XThreadPool::Run()
 //获取任务
 std::function<void()> XThreadPool::GetTask()
 {
-	unique_lock<mutex> lock(tasks_mux_);
+	std::unique_lock<std::mutex> lock(tasks_mux_);
 	if (tasks_.empty())
 	{
-		cv_.wait(lock);
+		if (all_tasks_have_add)
+		{
+			is_exit_ = true;
+			return nullptr;
+		}
+		else
+		{
+			cv_.wait(lock);
+		}
 	}
 
 	if (tasks_.empty())

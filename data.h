@@ -1,5 +1,4 @@
 ﻿#pragma once
-//#include"tinyxml2.h"
 #include<string>
 #include<vector>
 #include<array>
@@ -24,6 +23,5 @@ public:
 private:
 	std::vector<std::array<double, 2>> data;
 	std::string path;
-	std::vector<double> distance;//保存与其他数据集间的距离，顺序与queue<Data> data_queue 一致
 };
 

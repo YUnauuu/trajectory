@@ -3,17 +3,23 @@
 #include "xthread_pool.h"
 #include"euclidean.h"
 #include<filesystem>
+#include<chrono>
 
 
 enum compute_method //使用枚举类型
 {
 	EUCLIDEAN  //欧式距离
 };
-double result = 0.0;//结果数组
 
-std::mutex mtx_data_queue;//互斥使用 data_queue
+const double threshold_value = 0.5;//输出阈值
+std::chrono::steady_clock::time_point start;//记录开始时间
+
+std::mutex mtx_data_vector;//互斥使用 data_queue
 //std::queue<Data> data_queue;//存放所有读取的数据
 std::vector<Data> data_vector;//存放所有读取的数据
+std::mutex mtx_result_vv;//互斥使用 result_vv
+std::vector<std::vector<double>> result_vv;//结果数组，二维数组
+
 std::condition_variable cv_data;//如果data为空则阻塞计算，当读取文件后唤醒计算
 std::atomic<int> files_count(0);//记录总文件数
 std::atomic<int> read_data_count(0);//记录已读取数据个数
@@ -30,7 +36,7 @@ void data_function(std::string path)
 	data.ReadData(path);
 	//std::unique_lock<std::mutex> lock(mtx);
 	{
-		std::unique_lock<std::mutex> lock(mtx_data_queue);
+		std::unique_lock<std::mutex> lock(mtx_data_vector);
 		data_vector.emplace_back(data);
 	}
 	cv_data.notify_one();
@@ -89,32 +95,35 @@ void allFile(std::string path)
 		// 输出文件名
 		//std::cout << entry.path().filename() << std::endl;
 	}
+	//设置结果二维数组大小
+	result_vv.resize(files_count);
+	for (auto& vec : result_vv)
+	{
+		vec.resize(files_count);
+	}
 	files_count_get.store(true);
-}
-int main()
-{
-	XThreadPool::GetInstance().Init(16);//线程池初始化 16 线程
-	//添加任务 读取文件	
-	//XThreadPool::GetInstance().AddTask(data_function, "./data/11296094.gpx");
-	//XThreadPool::GetInstance().AddTask(data_function, "./data/11296434.gpx");
-	//system("pause");
-	
 	std::mutex temp_mtx;
 	std::unique_lock<std::mutex> lock(temp_mtx);
-	allFile("./data/");
 	cv_have_read_all_data.wait(lock);
 	for (int i = 0; i < files_count; ++i)
 	{
 		XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, i);
 	}
 	all_tasks_have_add.store(true);//全部任务已添加到任务队列
-
-	//cv_have_read_all_data.wait(mtx_data_queue);
-	//std::this_thread::sleep_for(std::chrono::seconds(10));
+}
+int main()
+{
+	start = std::chrono::steady_clock::now();//记录开始时间
 	
-	//XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, 0);
-	//XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, 1);
-	//XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, 2);
+	XThreadPool::GetInstance().Init(16);//线程池初始化 16 线程
+	//添加任务 读取文件	
+	//XThreadPool::GetInstance().AddTask(data_function, "./data/11296094.gpx");
+	//XThreadPool::GetInstance().AddTask(data_function, "./data/11296434.gpx");
+	//system("pause");
+	
+	
+	allFile("./data/");
+	
 
 	return 0;
 }

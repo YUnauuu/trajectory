@@ -6,7 +6,6 @@
 #include"xthread_pool.h"
 #include"euclidean.h"
 
-//using namespace tinyxml2;
 using namespace std;
 
 //void Data::readData(string path1, string path2)
