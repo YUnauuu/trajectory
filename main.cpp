@@ -55,12 +55,12 @@ void data_function(std::string path)
 }
 
 //计算, m 枚举类型的计算方法，rank 在data_queue 中的排位
-void compute_function(compute_method m, int rank)
+void compute_function(compute_method m, int i, int j)
 {
 	switch (m)
 	{
 	case EUCLIDEAN:
-		Euclidean eu(rank);
+		Euclidean eu(i, j);
 		
 		break;
 
@@ -107,7 +107,8 @@ void allFile(std::string path)
 	cv_have_read_all_data.wait(lock);
 	for (int i = 0; i < files_count; ++i)
 	{
-		XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, i);
+		for(int j = i+1;j<files_count;++j)
+			XThreadPool::GetInstance().AddTask(compute_function, EUCLIDEAN, i, j);
 	}
 	all_tasks_have_add.store(true);//全部任务已添加到任务队列
 }
