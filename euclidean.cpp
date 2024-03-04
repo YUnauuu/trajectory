@@ -58,7 +58,7 @@ extern std::vector<std::vector<double>> result_vv;//结果数组，二维数组
 	std::cout << "用时：" << duration.count() << "s" << std::endl;*/
 	//this->SetValue(result);
 //}
-//计算data_queue 中第rank位的数据
+//计算data_vector[i]和data_vector[j]间欧几里得距离
 Euclidean::Euclidean(int i, int j)
 {
 	//this->rank = ran;
@@ -78,6 +78,7 @@ Euclidean::Euclidean(int i, int j)
 	{
 		std::cout << data.GetName() << " 与 " << data_vector[rank + 1 + i].GetName() << " 间距离 = " << result_vector[i] << std::endl;
 	}*/
+	//std::cout << ". ";
 	Data data1 = data_vector[i];//多线程读，是线程安全的
 	Data data2 = data_vector[j];//多线程读，是线程安全的
 	if (data_vector[i].GetData().size() > data_vector[j].GetData().size())
@@ -87,7 +88,6 @@ Euclidean::Euclidean(int i, int j)
 	}
 	size_t n = data1.GetData().size();
 	size_t m = data2.GetData().size();//n <= m
-
 
 	std::function<double(int)> sum_function = [&](int j)->double
 	{
@@ -113,6 +113,6 @@ Euclidean::Euclidean(int i, int j)
 	{
 		std::unique_lock<std::mutex> lock(mtx_result_vv);
 		result_vv[i][j] = min_result;
-		result_vv[j][i] = min_result;
+		
 	}
 }

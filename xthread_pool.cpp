@@ -25,21 +25,6 @@ void XThreadPool::Init(int num)
 		threads_.emplace_back(&XThreadPool::Run, this);
 	}
 }
-//void XThreadPool::Init(int num)
-//{
-//	is_exit_ = false;
-//	unique_lock<mutex> lock(mux_);
-//	this->thread_num_ = num;
-//	cout << "Thread pool Init: " << num << endl;
-//
-//	//启动线程
-//	for (int i = 0; i < thread_num_; ++i)
-//	{
-//		//auto th = new thread(&XThreadPool::Run, this);
-//		auto th = make_shared<thread>(&XThreadPool::Run, this);
-//		threads_.emplace_back(th);
-//	}
-//}
 
 //线程池退出，输出最终结果
 void XThreadPool::Stop()
@@ -53,28 +38,28 @@ void XThreadPool::Stop()
 	}
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();//记录结束时间
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
-	std::cout << "用时：" << duration.count() << "s" << std::endl;
-	double max = result_vv[0][1];
-	double min = result_vv[0][1];
+	std::cout << "用时：" << duration.count() / 60 << "分" << duration.count() % 60 << "秒" << std::endl;
+	double max = result_vv[1][0];
+	double min = result_vv[1][0];
 	for (int i = 0; i < result_vv.size(); ++i)
 	{
 		for (int j = i + 1; j < result_vv.size(); ++j)
 		{
 			//std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 间距离：" << result_vv[i][j] << std::endl;
-			if (max < result_vv[i][j])
-				max = result_vv[i][j];
-			if (min > result_vv[i][j])
-				min = result_vv[i][j];
+			if (max < result_vv[j][i])
+				max = result_vv[j][i];
+			if (min > result_vv[j][i])
+				min = result_vv[j][i];
 		}
 	}
 	for (int i = 0; i < result_vv.size(); ++i)
 	{
 		for (int j = i + 1; j < result_vv.size(); ++j)
 		{
-			result_vv[i][j] = 1.0 - (result_vv[i][j] - min) / (max - min);//使用Min-Max 归一化
+			result_vv[j][i] = 1.0 - (result_vv[j][i] - min) / (max - min);//使用Min-Max 归一化
 			//std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 相似度：" << result_vv[i][j] << std::endl;
-			if(result_vv[i][j] > threshold_value)
-				std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 相似度：" << result_vv[i][j] << std::endl;
+			if (result_vv[j][i] > threshold_value);
+				//std::cout << data_vector[i].GetName() << " 与 " << data_vector[j].GetName() << " 相似度：" << result_vv[j][i] << std::endl;
 		}
 	}
 	std::unique_lock<std::mutex> lock(tasks_mux_);
@@ -92,7 +77,7 @@ void XThreadPool::Run()
 	{
 		auto task = GetTask();
 		if (!task) continue;
-		++task_run_count_;
+		//++task_run_count_;
 		/*{
 			std::unique_lock<std::mutex> lock(std_mtx);
 			std::cout << this->task_run_count() << std::endl;
@@ -116,7 +101,7 @@ void XThreadPool::Run()
 			//std::cout <<  std::endl;
 			std::cerr << "捕获到异常: " << e.what() << std::endl;
 		}
-		--task_run_count_;
+		//--task_run_count_;
 	}
 }
 

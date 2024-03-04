@@ -73,7 +73,7 @@ public:
 	bool is_exit() { return is_exit_; }
 
 	//返回正在运行的任务数量
-	int task_run_count() { return task_run_count_; }
+	//int task_run_count() { return task_run_count_; }
 	
 };
 

@@ -131,7 +131,8 @@ void Data::ReadData(std::string path)
 	stringstream ss;
 	while (getline(file, line_str))//直到读完文件
 	{
-		lat_str = R"( lat=)";
+		//切割前的读数据方法
+		/*lat_str = R"( lat=)";
 		auto pos = line_str.find(lat_str);
 		if (pos != string::npos)
 		{
@@ -153,7 +154,30 @@ void Data::ReadData(std::string path)
 			}
 			temp_arr[1] = stod(ss.str());
 			data.emplace_back(temp_arr);
+		}*/
+		//切割后的读数据方法
+		auto pos = line_str.find(",");
+		//std::cout << pos << std::endl;
+		pos = line_str.find(",", pos + 1);
+		//std::cout << pos << std::endl;
+		++pos;
+		ss.str("");
+		while ((line_str[pos] <= '9' && line_str[pos] >= '0') || line_str[pos] == '.' || line_str[pos] == '-')
+		{
+			ss << line_str[pos];
+			++pos;
 		}
+		temp_arr[0] = stod(ss.str());
+
+		++pos;
+		ss.str("");
+		while ((line_str[pos] <= '9' && line_str[pos] >= '0') || line_str[pos] == '.' || line_str[pos] == '-')
+		{
+			ss << line_str[pos];
+			++pos;
+		}
+		temp_arr[1] = stod(ss.str());
+		data.emplace_back(temp_arr);
 	}
 	file.close();
 }
